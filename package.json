@@ -1,0 +1,30 @@
+{
+  "name": "typescript-nodejs-template",
+  "private": true,
+  "main": "index.js",
+  "license": "MIT",
+  "type": "module",
+  "devDependencies": {
+    "@tsconfig/node16-strictest-esm": "^1.0.3",
+    "@types/node": "^18.7.6",
+    "@typescript-eslint/eslint-plugin": "^5.33.1",
+    "@typescript-eslint/parser": "^5.33.1",
+    "esbuild": "^0.15.5",
+    "eslint": "^8.22.0",
+    "eslint-config-prettier": "^8.5.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.7.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.7.4",
+    "vitest": "^0.22.1"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "run-p test:*",
+    "test:build": "yarn build --noEmit",
+    "test:vitest": "yarn vitest run",
+    "test:lint": "eslint --ext .js,.ts --ignore-path .gitignore .",
+    "test:format": "prettier --ignore-path .gitignore . --check",
+    "format": "prettier --ignore-path .gitignore . --write"
+  }
+}
