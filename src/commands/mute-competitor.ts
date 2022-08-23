@@ -17,6 +17,8 @@ export class MuteCompetitorCommand implements Command {
     if (!interaction.isChatInputCommand()) return;
     if (!interaction.inGuild()) return;
 
+    console.log("MuteCompetitorCommand");
+
     if (interaction.commandName !== this.getName()) {
       return;
     }

@@ -2,14 +2,15 @@ import { Client, GatewayIntentBits, REST, Routes } from "discord.js";
 
 import "dotenv/config";
 
+import { MuteCompetitorCommand } from "./commands/mute-competitor.js";
+import { UnmuteCompetitorCommand } from "./commands/unmute-competitor.js";
+import type { Command } from "./commands/type.js";
+import { ifAdmin } from "./if-admin.js";
+
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const token = process.env["DISCORD_TOKEN"]!;
 const applicationId = process.env["DISCORD_APPLICATION_ID"]!;
 const guildId = process.env["DISCORD_GUILD_ID"]!;
-
-import { MuteCompetitorCommand } from "./commands/mute-competitor.js";
-import { UnmuteCompetitorCommand } from "./commands/unmute-competitor.js";
-import type { Command } from "./commands/type.js";
 
 async function register(client: Client, rest: REST) {
   const commands: Command[] = [
@@ -21,11 +22,17 @@ async function register(client: Client, rest: REST) {
     body,
   });
 
-  for (const command of commands) {
-    client.on("interactionCreate", (interaction) =>
-      command.onInteractionCreate(interaction)
-    );
-  }
+  client.on("interactionCreate", async (interaction) => {
+    if (!interaction.isChatInputCommand()) return;
+    if (!(await ifAdmin(interaction))) {
+      await interaction.reply("コマンドを使えるのはぽよだけ");
+      return;
+    }
+
+    for (const command of commands) {
+      await command.onInteractionCreate(interaction);
+    }
+  });
 }
 
 async function main(): Promise<void> {
